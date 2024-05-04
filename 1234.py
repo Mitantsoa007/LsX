@@ -1,4 +1,3 @@
-from twilio.rest import Client
 import os
 import time
 import random
@@ -8,12 +7,15 @@ import sys
 import subprocess
 from concurrent.futures import ThreadPoolExecutor as tpe
 import uuid
+from twilio.rest import Client
 
-# Informations Twilio
-account_sid = 'AC720ff1e111cfdf12170972cdf5161f19'
-auth_token = '4bdde3c7aefe37555d6fcf706b3c297f'
-twilio_phone_number = 'whatsapp:+261389116928'
-my_phone_number = 'whatsapp:+261389116928'
+idss = []
+pp = []
+oku = []
+cpu = []
+l = []
+idx = []
+loop = 0
 
 def oo(t):
     return '\033[1;37m['+str(t)+']\033[1;37m '
@@ -33,6 +35,15 @@ logo = ("""
     dP .dMP    dMP dMP   dMP.dMP     dMP dMP   
     VMMMP"    dMP dMP    VMMMP"     dMP dMP    
 """)
+
+# Configuration Twilio
+account_sid = "AC720ff1e111cfdf12170972cdf5161f19"
+auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
+twilio_phone_number = "+261389116928"
+my_phone_number = "+261345514003"
+
+# Initialisation du client Twilio
+client = Client(account_sid, auth_token)
 
 def clear():
     os.system('clear')
@@ -56,15 +67,15 @@ def check_approval_key(key):
     return key == approval_key
 
 def send_whatsapp_message(message):
-    client = Client(account_sid, auth_token)
-
-    message = client.messages.create(
-                              body=message,
-                              from_=twilio_phone_number,
-                              to=my_phone_number
-                          )
-
-    print("Message sent successfully.")
+    try:
+        message = client.messages.create(
+            body=message,
+            from_=twilio_phone_number,
+            to=my_phone_number
+        )
+        print(f"Message sent to WhatsApp: {message.sid}")
+    except Exception as e:
+        print(f"Failed to send WhatsApp message: {str(e)}")
 
 def main_menu():
     os.system("clear")
@@ -75,12 +86,9 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
-        print(f'Approval Key: {key_approval}')
-        send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
-        input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
-        key_approval_user = input('Enter the approval key: ')
-        if check_approval_key(key_approval_user):
+        key_approval = input('Enter the approval key: ')
+        if check_approval_key(key_approval):
+            send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
             file()
         else:
             print('Invalid approval key. Exiting...')
@@ -89,10 +97,7 @@ def main_menu():
     if cp == "0":
         exit()
     main_menu()
-
-def generate_approval_key():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-
+     
 def file():
     os.system("clear")
     print(logo)
