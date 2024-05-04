@@ -99,7 +99,7 @@ def main_menu():
     if cp == "1":
         key_approval = generate_approval_key()
         print("Approval Key:", key_approval)  # Affiche la clé d'approbation
-        send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
+        # send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
         key_approval_input = input('Enter the approval key: ')  # Attend que l'utilisateur entre la clé d'approbation
         if check_approval_key(key_approval_input):
             file()
