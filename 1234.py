@@ -35,7 +35,17 @@ logo=(f"""
 
 def clear():
    os.system('clear')
-   print(logo);lin3()
+   print(logo);
+def read_approval_key():
+    try:
+        with open('approval_key.txt', 'r') as file:
+            return file.readline().strip()
+    except FileNotFoundError:
+        print("Approval key file not found.")
+        exit()
+
+# Utilisation de la fonction pour lire la clé d'approbation
+approval_key = read_approval_key()
 
 def lin3():
    print('\33[1;37m---------------------------------')
