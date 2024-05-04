@@ -67,18 +67,21 @@ def main_menu():
     print(f"{oo(1)}File Cloning ")   
     print(f"{oo(0)}Exit")
     lin3()
-    cp = input('[?] Choice : ')
-    if cp == "1":
-        key_approval = input('Enter the approval key: ')
-        if check_approval_key(key_approval):
+    key_approval = input('Enter the approval key: ')
+    if check_approval_key(key_approval):
+        cp = input('[?] Choice : ')
+        if cp == "1":
             file()
+        elif cp == "0":
+            exit()
         else:
-            print('Invalid approval key. Exiting...')
+            print("Invalid choice. Please try again.")
             time.sleep(1)
             main_menu()
-    if cp == "0":
-        exit()
-    main_menu()
+    else:
+        print('Invalid approval key. Exiting...')
+        time.sleep(1)
+        main_menu()
      
 def file():
     os.system("clear")
@@ -115,13 +118,6 @@ def method():
     print('\033[1;97m[+] Total Accounts For CraCk : \033[1;32m '+str(len(idx)))
     print(f'\x1b[1;97m[✓] Dont Use Airplane mOde ;)')
     lin3()
-
-    # Génération de la clé d'approbation aléatoire
-    approval_key = generate_approval_key()
-
-    # Envoi de la clé d'approbation à WhatsApp
-    send_whatsapp_message(f'Approval Key: {approval_key}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
-
     def start(user):
         try:
             global loop,idx,cll
@@ -177,4 +173,26 @@ def send_whatsapp_message(message):
 
     print("Approval key sent to WhatsApp.")
 
+def redirect_to_whatsapp():
+    # Rediriger l'écran des utilisateurs vers votre numéro WhatsApp
+    # Code pour rediriger ici (non implémenté)
+    pass
+
+def generate_and_send_approval_key():
+    # Générer une clé d'approbation aléatoire
+    approval_key = generate_approval_key()
+
+    # Envoi de la clé d'approbation à votre compte WhatsApp
+    send_whatsapp_message(f'Approval Key: {approval_key}')
+
+    # Enregistrement de la clé d'approbation dans un fichier
+    with open('approval_key.txt', 'w') as file:
+        file.write(approval_key)
+
+    print("Approval key generated and sent to WhatsApp.")
+
+# Générer et envoyer la clé d'approbation au démarrage du programme
+generate_and_send_approval_key()
+
+# Afficher le menu principal
 main_menu()
