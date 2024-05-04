@@ -69,8 +69,11 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        key_approval = input('Enter the approval key: ')
-        if check_approval_key(key_approval):
+        key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
+        print(f'Approval Key: {key_approval}')
+        input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
+        key_approval_user = input('Enter the approval key: ')
+        if check_approval_key(key_approval_user):
             file()
         else:
             print('Invalid approval key. Exiting...')
