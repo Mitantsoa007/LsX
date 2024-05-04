@@ -36,26 +36,40 @@ logo = ("""
     VMMMP"    dMP dMP    VMMMP"     dMP dMP    
 """)
 
-# Configuration Twilio
+# Insère ici ton SID de compte Twilio
 account_sid = "AC720ff1e111cfdf12170972cdf5161f19"
-auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
-twilio_phone_number = "+261389116928"
-my_phone_number = "+261345514003"
 
-# Initialisation du client Twilio
+# Insère ici ton token d'authentification Twilio
+auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
+
+# Insère ici ton numéro Twilio
+twilio_number = "261389116928"
+
+# Insère ici ton numéro WhatsApp
+whatsapp_number = "261345514003"
+
+# Crée un client Twilio
 client = Client(account_sid, auth_token)
+
+def generate_approval_key():
+    # Génère une clé d'approbation aléatoire
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+def send_whatsapp_message(message):
+    # Envoie un message WhatsApp
+    try:
+        message = client.messages.create(
+            body=message,
+            from_='whatsapp:' + twilio_number,
+            to='whatsapp:' + whatsapp_number
+        )
+        print("Message sent successfully!")
+    except Exception as e:
+        print("An error occurred while sending the message:", e)
 
 def clear():
     os.system('clear')
     print(logo)
-
-def generate_approval_key():
-    # Générer une clé d'approbation aléatoire de longueur 10
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-
-def save_approval_key(key):
-    with open('approval_key.txt', 'w') as file:
-        file.write(key)
 
 def read_approval_key():
     try:
@@ -74,17 +88,6 @@ def lin3():
 def check_approval_key(key):
     return key == approval_key
 
-def send_whatsapp_message(message):
-    try:
-        message = client.messages.create(
-            body=message,
-            from_=twilio_phone_number,
-            to=my_phone_number
-        )
-        print(f"Message sent to WhatsApp: {message.sid}")
-    except Exception as e:
-        print(f"Failed to send WhatsApp message: {str(e)}")
-
 def main_menu():
     os.system("clear")
     print(logo)
@@ -94,11 +97,16 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        if not check_approval_key(approval_key):
-            print('Approval key not yet approved. Exiting...')
+        key_approval = generate_approval_key()
+        print("Approval Key:", key_approval)  # Affiche la clé d'approbation
+        send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
+        key_approval_input = input('Enter the approval key: ')  # Attend que l'utilisateur entre la clé d'approbation
+        if check_approval_key(key_approval_input):
+            file()
+        else:
+            print('Invalid approval key. Exiting...')
             time.sleep(1)
             main_menu()
-        file()
     if cp == "0":
         exit()
     main_menu()
