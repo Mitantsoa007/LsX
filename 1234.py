@@ -43,17 +43,17 @@ account_sid = "AC720ff1e111cfdf12170972cdf5161f19"
 auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
 
 # Insère ici ton numéro Twilio
-twilio_number = "261389116928"
+twilio_number = "+261389116928"
 
 # Insère ici ton numéro WhatsApp
-whatsapp_number = "261345514003"
+whatsapp_number = "+261345514003"
 
 # Crée un client Twilio
 client = Client(account_sid, auth_token)
 
 def generate_approval_key():
     # Génère une clé d'approbation aléatoire
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=30))
 
 def send_whatsapp_message(message):
     # Envoie un message WhatsApp
