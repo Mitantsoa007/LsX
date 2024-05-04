@@ -49,6 +49,14 @@ def clear():
     os.system('clear')
     print(logo)
 
+def generate_approval_key():
+    # Générer une clé d'approbation aléatoire de longueur 10
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+
+def save_approval_key(key):
+    with open('approval_key.txt', 'w') as file:
+        file.write(key)
+
 def read_approval_key():
     try:
         with open('approval_key.txt', 'r') as file:
@@ -86,14 +94,10 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        key_approval = input('Enter the approval key: ')
-        if check_approval_key(key_approval):
-            send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
-            file()
-        else:
-            print('Invalid approval key. Exiting...')
-            time.sleep(1)
-            main_menu()
+        approval_key = generate_approval_key()
+        save_approval_key(approval_key)
+        send_whatsapp_message(f'Approval Key: {approval_key}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
+        file()
     if cp == "0":
         exit()
     main_menu()
