@@ -94,9 +94,10 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        approval_key = generate_approval_key()
-        save_approval_key(approval_key)
-        send_whatsapp_message(f'Approval Key: {approval_key}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
+        if not check_approval_key(approval_key):
+            print('Approval key not yet approved. Exiting...')
+            time.sleep(1)
+            main_menu()
         file()
     if cp == "0":
         exit()
