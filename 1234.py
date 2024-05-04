@@ -50,6 +50,10 @@ def read_approval_key():
 # Utilisation de la fonction pour lire la clé d'approbation
 approval_key = read_approval_key()
 
+# Fonction pour générer une clé d'approbation aléatoire
+def generate_approval_key():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
 def lin3():
     print('\33[1;37m---------------------------------')
 
