@@ -40,9 +40,6 @@ def clear():
     os.system('clear')
     print(logo)
 
-def generate_approval_key():
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-
 def read_approval_key():
     try:
         with open('approval_key.txt', 'r') as file:
@@ -60,6 +57,38 @@ def lin3():
 def check_approval_key(key):
     return key == approval_key
 
+def generate_and_send_approval_key():
+    # Générer une clé d'approbation aléatoire
+    approval_key = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    
+    # Enregistrer la clé d'approbation dans un fichier
+    with open('approval_key.txt', 'w') as file:
+        file.write(approval_key)
+    
+    # Envoyer la clé d'approbation sur WhatsApp
+    send_whatsapp_message(f'Approval Key: {approval_key}')
+
+def send_whatsapp_message(message):
+    # Configurer les informations du compte Twilio
+    account_sid = "AC720ff1e111cfdf12170972cdf5161f19"
+    auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
+    twilio_number = "+261389116928"
+    whatsapp_number = "+261345514003"
+
+    # Initialiser le client Twilio
+    client = Client(account_sid, auth_token)
+
+    try:
+        # Envoyer le message WhatsApp
+        message = client.messages.create(
+            body=message,
+            from_='whatsapp:' + twilio_number,
+            to='whatsapp:' + whatsapp_number
+        )
+        print("WhatsApp message sent successfully.")
+    except Exception as e:
+        print("Error sending WhatsApp message:", e)
+
 def main_menu():
     os.system("clear")
     print(logo)
@@ -67,21 +96,18 @@ def main_menu():
     print(f"{oo(1)}File Cloning ")   
     print(f"{oo(0)}Exit")
     lin3()
-    key_approval = input('Enter the approval key: ')
-    if check_approval_key(key_approval):
-        cp = input('[?] Choice : ')
-        if cp == "1":
+    cp = input('[?] Choice : ')
+    if cp == "1":
+        key_approval = input('Enter the approval key: ')
+        if check_approval_key(key_approval):
             file()
-        elif cp == "0":
-            exit()
         else:
-            print("Invalid choice. Please try again.")
+            print('Invalid approval key. Exiting...')
             time.sleep(1)
             main_menu()
-    else:
-        print('Invalid approval key. Exiting...')
-        time.sleep(1)
-        main_menu()
+    if cp == "0":
+        exit()
+    main_menu()
      
 def file():
     os.system("clear")
@@ -154,45 +180,4 @@ def method():
             tp.map(start,idx)
     exit()    
 
-def send_whatsapp_message(message):
-    # Paramètres Twilio
-    account_sid = 'AC720ff1e111cfdf12170972cdf5161f19'
-    auth_token = '4bdde3c7aefe37555d6fcf706b3c297f'
-    twilio_number = '261389116928'
-    whatsapp_number = '261345514003'
-
-    # Initialisation du client Twilio
-    client = Client(account_sid, auth_token)
-
-    # Envoi du message WhatsApp
-    message = client.messages.create(
-        body=message,
-        from_='whatsapp:' + twilio_number,
-        to='whatsapp:' + whatsapp_number
-    )
-
-    print("Approval key sent to WhatsApp.")
-
-def redirect_to_whatsapp():
-    # Rediriger l'écran des utilisateurs vers votre numéro WhatsApp
-    # Code pour rediriger ici (non implémenté)
-    pass
-
-def generate_and_send_approval_key():
-    # Générer une clé d'approbation aléatoire
-    approval_key = generate_approval_key()
-
-    # Envoi de la clé d'approbation à votre compte WhatsApp
-    send_whatsapp_message(f'Approval Key: {approval_key}')
-
-    # Enregistrement de la clé d'approbation dans un fichier
-    with open('approval_key.txt', 'w') as file:
-        file.write(approval_key)
-
-    print("Approval key generated and sent to WhatsApp.")
-
-# Générer et envoyer la clé d'approbation au démarrage du programme
-generate_and_send_approval_key()
-
-# Afficher le menu principal
 main_menu()
