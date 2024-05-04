@@ -47,11 +47,11 @@ def read_approval_key():
 # Utilisation de la fonction pour lire la clé d'approbation
 approval_key = read_approval_key()
 key_approval = input('Enter the approval key: ')  # Demander à l'utilisateur de saisir le mot de passe d'approbation
-        if check_approval_key(key_approval):
-            file()
-        else:
-            print('Invalid approval key. Exiting...')
-            time.sleep(1)
+   if check_approval_key(key_approval):
+   file()
+   else:
+   print('Invalid approval key. Exiting...')
+   time.sleep(1)
 def lin3():
    print('\33[1;37m---------------------------------')
 
