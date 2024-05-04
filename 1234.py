@@ -1,3 +1,4 @@
+from twilio.rest import Client
 import os
 import time
 import random
@@ -8,13 +9,11 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor as tpe
 import uuid
 
-idss = []
-pp = []
-oku = []
-cpu = []
-l = []
-idx = []
-loop = 0
+# Informations Twilio
+account_sid = 'AC720ff1e111cfdf12170972cdf5161f19'
+auth_token = '4bdde3c7aefe37555d6fcf706b3c297f'
+twilio_phone_number = 'whatsapp:+261389116928'
+my_phone_number = 'whatsapp:+261389116928'
 
 def oo(t):
     return '\033[1;37m['+str(t)+']\033[1;37m '
@@ -50,15 +49,22 @@ def read_approval_key():
 # Utilisation de la fonction pour lire la clé d'approbation
 approval_key = read_approval_key()
 
-# Fonction pour générer une clé d'approbation aléatoire
-def generate_approval_key():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-
 def lin3():
     print('\33[1;37m---------------------------------')
 
 def check_approval_key(key):
     return key == approval_key
+
+def send_whatsapp_message(message):
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+                              body=message,
+                              from_=twilio_phone_number,
+                              to=my_phone_number
+                          )
+
+    print("Message sent successfully.")
 
 def main_menu():
     os.system("clear")
@@ -71,6 +77,7 @@ def main_menu():
     if cp == "1":
         key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
         print(f'Approval Key: {key_approval}')
+        send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
         input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
         key_approval_user = input('Enter the approval key: ')
         if check_approval_key(key_approval_user):
@@ -82,7 +89,10 @@ def main_menu():
     if cp == "0":
         exit()
     main_menu()
-     
+
+def generate_approval_key():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
 def file():
     os.system("clear")
     print(logo)
