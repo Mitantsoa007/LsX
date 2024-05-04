@@ -36,6 +36,37 @@ logo = ("""
     VMMMP"    dMP dMP    VMMMP"     dMP dMP    
 """)
 
+# Insère ici ton SID de compte Twilio
+account_sid = "AC720ff1e111cfdf12170972cdf5161f19"
+
+# Insère ici ton token d'authentification Twilio
+auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
+
+# Insère ici ton numéro Twilio
+twilio_number = "261389116928"
+
+# Insère ici ton numéro WhatsApp
+whatsapp_number = "261345514003"
+
+# Crée un client Twilio
+client = Client(account_sid, auth_token)
+
+def generate_approval_key():
+    # Génère une clé d'approbation aléatoire
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+def send_whatsapp_message(message):
+    # Envoie un message WhatsApp
+    try:
+        message = client.messages.create(
+            body=message,
+            from_='whatsapp:' + twilio_number,
+            to='whatsapp:' + whatsapp_number
+        )
+        print("Message sent successfully!")
+    except Exception as e:
+        print("An error occurred while sending the message:", e)
+
 def clear():
     os.system('clear')
     print(logo)
@@ -57,38 +88,6 @@ def lin3():
 def check_approval_key(key):
     return key == approval_key
 
-def generate_and_send_approval_key():
-    # Générer une clé d'approbation aléatoire
-    approval_key = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-    
-    # Enregistrer la clé d'approbation dans un fichier
-    with open('approval_key.txt', 'w') as file:
-        file.write(approval_key)
-    
-    # Envoyer la clé d'approbation sur WhatsApp
-    send_whatsapp_message(f'Approval Key: {approval_key}')
-
-def send_whatsapp_message(message):
-    # Configurer les informations du compte Twilio
-    account_sid = "AC720ff1e111cfdf12170972cdf5161f19"
-    auth_token = "4bdde3c7aefe37555d6fcf706b3c297f"
-    twilio_number = "+261389116928"
-    whatsapp_number = "+261345514003"
-
-    # Initialiser le client Twilio
-    client = Client(account_sid, auth_token)
-
-    try:
-        # Envoyer le message WhatsApp
-        message = client.messages.create(
-            body=message,
-            from_='whatsapp:' + twilio_number,
-            to='whatsapp:' + whatsapp_number
-        )
-        print("WhatsApp message sent successfully.")
-    except Exception as e:
-        print("Error sending WhatsApp message:", e)
-
 def main_menu():
     os.system("clear")
     print(logo)
@@ -98,8 +97,11 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        key_approval = input('Enter the approval key: ')
-        if check_approval_key(key_approval):
+        key_approval = generate_approval_key()
+        print("Approval Key:", key_approval)  # Affiche la clé d'approbation
+        send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
+        key_approval_input = input('Enter the approval key: ')  # Attend que l'utilisateur entre la clé d'approbation
+        if check_approval_key(key_approval_input):
             file()
         else:
             print('Invalid approval key. Exiting...')
