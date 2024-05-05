@@ -7,6 +7,7 @@ import sys
 import subprocess
 from concurrent.futures import ThreadPoolExecutor as tpe
 import uuid
+import urllib.parse
 
 idss = []
 pp = []
@@ -60,28 +61,40 @@ def lin3():
 def check_approval_key(key):
     return key == approval_key
 
+def send_approval_key_to_whatsapp(key):
+    numero_telephone = "+261345514003"
+    message = f"Approval Key: {key}"
+    message_encoded = urllib.parse.quote(message)
+    uri_whatsapp = f"whatsapp://send?phone={numero_telephone}&text={message_encoded}"
+    command = f"am start -a android.intent.action.VIEW -d '{uri_whatsapp}'"
+    subprocess.run(command, shell=True)
+
 def main_menu():
+    key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
+    send_approval_key_to_whatsapp(key_approval)  # Envoyer la clé d'approbation à WhatsApp
+    print("Please check your WhatsApp for the approval key.")
+    input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
+    key_approval_user = input('Enter the approval key: ')
     os.system("clear")
     print(logo)
     lin3()
-    print(f"{oo(1)}File Cloning ")   
-    print(f"{oo(0)}Exit")
-    lin3()
-    cp = input('[?] Choice : ')
-    if cp == "1":
-        key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
-        print(f'Approval Key: {key_approval}')
-        input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
-        key_approval_user = input('Enter the approval key: ')
-        if check_approval_key(key_approval_user):
+    if check_approval_key(key_approval_user):
+        print(f"{oo(1)}File Cloning ")   
+        print(f"{oo(0)}Exit")
+        lin3()
+        cp = input('[?] Choice : ')
+        if cp == "1":
             file()
+        elif cp == "0":
+            exit()
         else:
-            print('Invalid approval key. Exiting...')
+            print("Invalid choice. Please try again.")
             time.sleep(1)
             main_menu()
-    if cp == "0":
-        exit()
-    main_menu()
+    else:
+        print('Invalid approval key. Exiting...')
+        time.sleep(1)
+        main_menu()
      
 def file():
     os.system("clear")
