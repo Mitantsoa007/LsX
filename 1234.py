@@ -50,6 +50,10 @@ def read_approval_key():
 # Utilisation de la fonction pour lire la clé d'approbation
 approval_key = read_approval_key()
 
+# Fonction pour générer une clé d'approbation aléatoire
+def generate_approval_key():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=50))
+
 def lin3():
     print('\33[1;37m---------------------------------')
 
@@ -65,8 +69,11 @@ def main_menu():
     lin3()
     cp = input('[?] Choice : ')
     if cp == "1":
-        key_approval = input('Enter the approval key: ')
-        if check_approval_key(key_approval):
+        key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
+        print(f'Approval Key: {key_approval}')
+        input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
+        key_approval_user = input('Enter the approval key: ')
+        if check_approval_key(key_approval_user):
             file()
         else:
             print('Invalid approval key. Exiting...')
