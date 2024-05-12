@@ -40,8 +40,20 @@ def clear():
     os.system('clear')
     print(logo)
 
-# Clé d'approbation fixe
-approval_key = "Mickael Free"
+# URL du fichier contenant la clé d'approbation sur GitHub
+approval_key_url = 'https://raw.githubusercontent.com/Mitantsoa007/LsX/approval_key.txt'
+
+def read_approval_key():
+    try:
+        response = requests.get(approval_key_url)
+        response.raise_for_status()  # Lève une exception en cas d'erreur HTTP
+        return response.text.strip()
+    except requests.exceptions.RequestException as e:
+        print("Error reading approval key:", e)
+        exit()
+
+# Utilisation de la fonction pour lire la clé d'approbation depuis GitHub
+approval_key = read_approval_key()
 
 def lin3():
     print('\33[1;37m---------------------------------')
