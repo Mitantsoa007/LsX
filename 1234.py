@@ -40,20 +40,8 @@ def clear():
     os.system('clear')
     print(logo)
 
-def read_approval_key():
-    try:
-        with open('approval_key.txt', 'r') as file:
-            return file.readline().strip()
-    except FileNotFoundError:
-        print("Approval key file not found.")
-        exit()
-
-# Utilisation de la fonction pour lire la clé d'approbation
-approval_key = read_approval_key()
-
-# Fonction pour générer une clé d'approbation aléatoire
-def generate_approval_key():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=30))
+# Clé d'approbation fixe
+approval_key = "Mickael Free"
 
 def lin3():
     print('\33[1;37m---------------------------------')
@@ -61,17 +49,7 @@ def lin3():
 def check_approval_key(key):
     return key == approval_key
 
-def send_approval_key_to_whatsapp(key):
-    numero_telephone = "+261345514003"
-    message = f"Approval Key: {key}"
-    message_encoded = urllib.parse.quote(message)
-    uri_whatsapp = f"whatsapp://send?phone={numero_telephone}&text={message_encoded}"
-    command = f"am start -a android.intent.action.VIEW -d '{uri_whatsapp}'"
-    subprocess.run(command, shell=True)
-
 def main_menu():
-    key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
-    send_approval_key_to_whatsapp(key_approval)  # Envoyer la clé d'approbation à WhatsApp
     print("Please check your WhatsApp for the approval key.")
     input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
     key_approval_user = input('Enter the approval key: ')
@@ -167,33 +145,4 @@ def method():
             tp.map(start,idx)
     exit()    
 
-# Fonction pour le menu principal
-def main_menu():
-    key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
-    send_approval_key_to_whatsapp(key_approval)  # Envoyer la clé d'approbation à WhatsApp
-    print("Please check your WhatsApp for the approval key.")
-    input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
-    key_approval_user = input('Enter the approval key: ')
-    os.system("clear")
-    print(logo)
-    lin3()
-    if check_approval_key(key_approval_user):
-        print(f"{oo(1)}File Cloning ")   
-        print(f"{oo(0)}Exit")
-        lin3()
-        cp = input('[?] Choice : ')
-        if cp == "1":
-            file()
-        elif cp == "0":
-            exit()
-        else:
-            print("Invalid choice. Please try again.")
-            time.sleep(1)
-            main_menu()
-    else:
-        print('Invalid approval key. Exiting...')
-        time.sleep(1)
-        main_menu()
-
-# Appel de la fonction pour démarrer le menu principal
 main_menu()
