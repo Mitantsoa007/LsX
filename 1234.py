@@ -167,4 +167,33 @@ def method():
             tp.map(start,idx)
     exit()    
 
+# Fonction pour le menu principal
+def main_menu():
+    key_approval = generate_approval_key()  # Générer une clé d'approbation aléatoire
+    send_approval_key_to_whatsapp(key_approval)  # Envoyer la clé d'approbation à WhatsApp
+    print("Please check your WhatsApp for the approval key.")
+    input('Press Enter once approved...')  # Attendre que l'utilisateur approuve la clé
+    key_approval_user = input('Enter the approval key: ')
+    os.system("clear")
+    print(logo)
+    lin3()
+    if check_approval_key(key_approval_user):
+        print(f"{oo(1)}File Cloning ")   
+        print(f"{oo(0)}Exit")
+        lin3()
+        cp = input('[?] Choice : ')
+        if cp == "1":
+            file()
+        elif cp == "0":
+            exit()
+        else:
+            print("Invalid choice. Please try again.")
+            time.sleep(1)
+            main_menu()
+    else:
+        print('Invalid approval key. Exiting...')
+        time.sleep(1)
+        main_menu()
+
+# Appel de la fonction pour démarrer le menu principal
 main_menu()
