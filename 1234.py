@@ -53,7 +53,7 @@ approval_key = read_approval_key()
 
 # Fonction pour générer une clé d'approbation aléatoire
 def generate_approval_key():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=50))
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=30))
 
 def lin3():
     print('\33[1;37m---------------------------------')
